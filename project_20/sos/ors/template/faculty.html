@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add Faculty</h1>
+            {% if form.error %}
+                <h3><font color="red">{{ form.message }}</font></h3>
+            {% else %}
+                <h3><font color="green">{{ form.message }}</font></h3>
+            {% endif %}
+
+            <table>
+                <input type="hidden" name="id" value="{{ form.id }}">
+                <tr>
+                    <th>First Name:</th>
+                    <td><input type="text" name="first_name" value="{{ form.first_name }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name:</th>
+                    <td><input type="text" name="last_name" value="{{ form.last_name }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td><input type="text" name="email" value="{{ form.email }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.email }}</td>
+                </tr>
+                <tr>
+                    <th>Password:</th>
+                    <td><input type="text" name="password" value="{{ form.password }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.password }}</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td><input type="text" name="address" value="{{ form.address }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.address }}</td>
+                </tr>
+                <tr>
+                    <th>Gender:</th>
+                    <td>
+                        {{ preload_data.gender_select|safe }}
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.gender }}</td>
+                </tr>
+                <tr>
+                    <th>Mobile Number:</th>
+                    <td><input type="text" name="mobile_number" value="{{ form.mobile_number }}"></td>
+                    <td style="color: red; padding-left: 10px;">{{ form.input_error.mobile_number }}</td>
+                </tr>
+                <tr>
+                    <th>DOB:</th>
+                    <td><input type="date" name="dob" value="{{ form.dob }}" style="width: 97%;"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.dob }}</td>
+                </tr>
+                <tr>
+                    <th>College:</th>
+                    <td>
+                        {{ preload_data.college_select|safe }}
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.college_id }}</td>
+                </tr>
+                <tr>
+                    <th>Course:</th>
+                    <td>
+                        {{ preload_data.course_select|safe }}
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.course_id }}</td>
+                </tr>
+                <tr>
+                    <th>Subject:</th>
+                    <td>
+                        {{ preload_data.subject_select|safe }}
+                    </td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.subject_id }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

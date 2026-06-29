@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Add Marksheet</h1>
+
+            {% if form.error %}
+                <h3><font color="red">{{ form.message }}</font></h3>
+            {% else %}
+                <h3><font color="green">{{ form.message }}</font></h3>
+            {% endif %}
+
+            <table>
+                <input type="hidden" name="id" value="{{ form.id }}">
+
+                <tr>
+                    <th>Roll No.:</th>
+                    <td><input type="text" name="roll_number" value="{{ form.roll_number }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.roll_number }}</td>
+                </tr>
+<!--                <tr>-->
+<!--                    <th>Student ID:</th>-->
+<!--                    <td><input type="text" name="student_id" value="{{ form.student_id }}"></td>-->
+<!--                    <td style="color: red; padding-left: 10px;">{{ form.input_error.student_id }}</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th>Name:</th>-->
+<!--                    <td><input type="text" name="name" value="{{ form.name }}"></td>-->
+<!--                    <td style="position: fixed; color: red;">{{ form.input_error.name }}</td>-->
+<!--                </tr>-->
+                <tr>
+                    <th>Select Student:</th>
+                    <td>
+                        {{ preload_data.student_select|safe }}
+                    </td>
+                    <td style="color: red; padding-left: 10px;">{{ form.input_error.student_id }}</td>
+                </tr>
+                <tr>
+                    <th>Year:</th>
+                    <td><input type="text" name="year" value="{{ form.year }}"></td>
+                    <td style="color: red; padding-left: 10px;">{{ form.input_error.year }}</td>
+                </tr>
+
+                <tr>
+                    <th>Physics:</th>
+                    <td><input type="number" name="physics" value="{{ form.physics }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.physics }}</td>
+                </tr>
+                <tr>
+                    <th>Chemistry:</th>
+                    <td><input type="number" name="chemistry" value="{{ form.chemistry }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.chemistry }}</td>
+                </tr>
+                <tr>
+                    <th>Maths:</th>
+                    <td><input type="number" name="maths" value="{{ form.maths }}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.maths }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td><input type="submit" value="save"></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

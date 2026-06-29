@@ -1,0 +1,120 @@
+from .base_ctl import BaseCtl
+from django.shortcuts import render
+from service.models import Subject
+from service.service.subject_service import SubjectService
+from service.service.course_service import CourseService
+from ..utility.html_utility import HtmlUtility
+from ..utility.data_validator import DataValidator
+
+
+class SubjectCtl(BaseCtl):
+    def request_to_form(self, request_form):
+        self.form["id"] = request_form.get("id", 0)
+        self.form["name"] = request_form.get("name", "").strip()
+        self.form["description"] = request_form.get("description", "").strip()
+        self.form["course_id"] = request_form.get("course_id", 0)
+
+    def form_to_model(self, obj):
+        obj.id = int(self.form.get("id", 0) or 0)
+        obj.name = self.form.get("name", "").strip()
+        obj.description = self.form.get("description", "").strip()
+
+        course_id = int(self.form.get("course_id") or 0)
+        obj.course_id = course_id
+
+        course = CourseService().get(course_id) if course_id > 0 else None
+        obj.course_name = course.name if course else ""
+
+        return obj
+
+    def input_validation(self):
+        super().input_validation()
+        input_error = self.form["input_error"]
+
+        if DataValidator.is_null(self.form["name"]):
+            input_error["name"] = "Name can not be null"
+            self.form["error"] = True
+
+        if DataValidator.is_null(self.form["description"]):
+            input_error["description"] = "Description can not be null"
+            self.form["error"] = True
+
+        if DataValidator.is_null(self.form.get("course_id")) or self.form.get("course_id") == "0":
+            input_error["course_id"] = "Course can not be null"
+            self.form["error"] = True
+
+        return self.form["error"]
+
+    def preload(self, request):
+        course_list = CourseService().search({})
+
+        self.preload_data["course_select"] = HtmlUtility.get_list_from_beans(
+            "course_id",
+            int(self.form.get("course_id") or 0),
+            course_list
+        )
+        return self.preload_data
+
+    def display(self, request, params={}):
+        res = render(request, self.get_template(), {
+            "form": self.form,
+            "preload_data": self.preload(request)
+        })
+        return res
+
+    # def submit(self, request, params={}):
+    #
+    #     pk = int(self.form.get('id', 0))
+    #
+    #     duplicate = self.get_service().get_model().objects.filter(name=self.form.get('name', ''))
+    #
+    #     if pk > 0:
+    #         duplicate = duplicate.exclude(id=pk)
+    #
+    #     if duplicate.exists():
+    #         self.form['error'] = True
+    #         self.form['message'] = "Subject already exist"
+    #     else:
+    #         subject = self.form_to_model(Subject())
+    #         self.get_service().save(subject)
+    #         self.form['id'] = subject.id
+    #         self.form['error'] = False
+    #
+    #         if pk > 0:
+    #             self.form['message'] = "Subject updated successfully"
+    #         else:
+    #             self.form['message'] = "Subject added successfully..!!"
+    #
+    #     res = render(request, self.get_template(), {
+    #         "form": self.form,
+    #         "preload_data": self.preload(request)
+    #     })
+    #     return res
+
+    def submit(self, request, params={}):
+
+        duplicate = self.get_service().get_model().objects.filter(name=self.form.get('name', ''))
+
+        if duplicate.exists():
+            self.form['error'] = True
+            self.form['message'] = "Subject already exist"
+
+        else:
+            subject = self.form_to_model(Subject())
+            self.get_service().save(subject)
+
+            self.form['id'] = subject.id
+            self.form['error'] = False
+            self.form['message'] = "Subject added successfully..!!"
+
+        res = render(request, self.get_template(), {
+            "form": self.form,
+            "preload_data": self.preload(request)
+        })
+        return res
+
+    def get_template(self):
+        return "subject.html"
+
+    def get_service(self):
+        return SubjectService()

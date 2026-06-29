@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient List</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            <h1>Patient List</h1>
+            {% if form.error %}
+                <h3><font color="red">{{ form.message }}</font></h3>
+            {% else %}
+                <h3><font color="green">{{ form.message }}</font></h3>
+            {% endif %}
+        </div>
+        <div align="center">
+            <table>
+                <tr>
+                    <th>Patient Name:</th>
+                    <td>
+                        <input type="text" name="patient_name" placeholder="Enter patient name" value="{{ form.patient_name }}">
+                    </td>
+                    <td>
+                        <input type="submit" name="operation" value="search">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br>
+
+        <!-- Data Table Section -->
+        <table border="1%" width="100%">
+            <tr>
+                <th><input type="checkbox" id="selectall"></th>
+                <th>S. No.</th>
+                <th>Patient Name</th>
+                <th>Disease</th>
+                <th>Doctor Name</th>
+                <th>Age</th>
+                <th>Edit</th>
+            </tr>
+            {% for l in page_list %}
+            <tr>
+                <td align="center">
+                    <input type="checkbox" class="case" name="ids" value="{{ l.id }}">
+                </td>
+                <td align="center">{{ form.start_index|add:forloop.counter }}</td>
+                <td align="center">{{ l.patient_name }}</td>
+                <td align="center">{{ l.disease }}</td>
+                <td align="center">{{ l.doctor_name }}</td>
+                <td align="center">{{ l.age }}</td>
+                <td align="center">
+                    <a href="/ORS/Patient/{{ l.id }}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+
+        <!-- Pagination & Action Buttons -->
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 30%">
+                    <input type="submit" name="operation" value="previous" {% if not form.has_previous %}disabled{% endif %}>
+                </td>
+                <td style="width: 30%">
+                    <a href="/ORS/Patient/"><input type="button" value="new"></a>
+                </td>
+                <td style="width: 25%">
+                    <input type="submit" name="operation" value="delete">
+                </td>
+                <td style="text-align: right;">
+                    <input type="submit" name="operation" value="next" {% if not form.has_next %} disabled {% endif %}>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
