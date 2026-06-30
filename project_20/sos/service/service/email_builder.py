@@ -31,7 +31,7 @@ class EmailBuilder:
     #Build forgot password message
     @staticmethod
     def forgot_password(params):
-        dir =  EmailBuilder.template_dir + "forgotpassword.html"
+        dir =  EmailBuilder.template_dir / "forgotpassword.html"
         #open the file
         filein = open(dir)
         #read it

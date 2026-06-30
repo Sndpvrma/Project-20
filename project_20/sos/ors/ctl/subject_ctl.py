@@ -27,6 +27,14 @@ class SubjectCtl(BaseCtl):
 
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+        self.form["id"] = obj.id
+        self.form["name"] = obj.name
+        self.form["description"] = obj.description
+        self.form["course_id"] = int(obj.course_id) if obj.course_id else 0
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form["input_error"]
@@ -56,40 +64,18 @@ class SubjectCtl(BaseCtl):
         return self.preload_data
 
     def display(self, request, params={}):
+        subject_id = int(params.get("id", 0))
+
+        if subject_id > 0:
+            subject = self.get_service().get(subject_id)
+            self.model_to_form(subject)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)
         })
         return res
 
-    # def submit(self, request, params={}):
-    #
-    #     pk = int(self.form.get('id', 0))
-    #
-    #     duplicate = self.get_service().get_model().objects.filter(name=self.form.get('name', ''))
-    #
-    #     if pk > 0:
-    #         duplicate = duplicate.exclude(id=pk)
-    #
-    #     if duplicate.exists():
-    #         self.form['error'] = True
-    #         self.form['message'] = "Subject already exist"
-    #     else:
-    #         subject = self.form_to_model(Subject())
-    #         self.get_service().save(subject)
-    #         self.form['id'] = subject.id
-    #         self.form['error'] = False
-    #
-    #         if pk > 0:
-    #             self.form['message'] = "Subject updated successfully"
-    #         else:
-    #             self.form['message'] = "Subject added successfully..!!"
-    #
-    #     res = render(request, self.get_template(), {
-    #         "form": self.form,
-    #         "preload_data": self.preload(request)
-    #     })
-    #     return res
 
     def submit(self, request, params={}):
 

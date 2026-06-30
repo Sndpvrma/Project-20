@@ -61,6 +61,24 @@ class FacultyCtl(BaseCtl):
 
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+
+        self.form["id"] = obj.id
+        self.form["first_name"] = obj.first_name
+        self.form["last_name"] = obj.last_name
+        self.form["email"] = obj.email
+        self.form["password"] = obj.password
+        self.form["dob"] = obj.dob.strftime("%Y-%m-%d") if obj.dob else ""
+        self.form["gender"] = obj.gender
+        self.form["mobile_number"] = obj.mobile_number
+        self.form["address"] = obj.address
+
+        self.form["college_id"] = int(obj.college_id) if obj.college_id else 0
+        self.form["course_id"] = int(obj.course_id) if obj.course_id else 0
+        self.form["subject_id"] = int(obj.subject_id) if obj.subject_id else 0
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form.get("input_error", {})
@@ -96,9 +114,9 @@ class FacultyCtl(BaseCtl):
             input_error["mobile_number"] = "Mobile Number can not be null"
             self.form["error"] = True
 
-        # elif not DataValidator.is_mobile_number(self.form.get("mobile_number")):
-        #     input_error["mobile_number"] = "Mobile Number must be 10 digits"
-        #     self.form["error"] = True
+        elif not DataValidator.is_mobile_number(self.form.get("mobile_number")):
+            input_error["mobile_number"] = "Mobile Number must be 10 digits"
+            self.form["error"] = True
 
         if DataValidator.is_null(self.form.get("address")):
             input_error["address"] = "Address can not be null"
@@ -147,6 +165,12 @@ class FacultyCtl(BaseCtl):
         return self.preload_data
 
     def display(self, request, params={}):
+        faculty_id = int(params.get("id", 0))
+
+        if faculty_id > 0:
+            faculty = self.get_service().get(faculty_id)
+            self.model_to_form(faculty)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)

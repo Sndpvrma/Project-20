@@ -17,6 +17,13 @@ class RoleCtl(BaseCtl):
         obj.description = self.form.get("description", "").strip()
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+        self.form["id"] = obj.id
+        self.form["name"] = obj.name
+        self.form["description"] = obj.description
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form["input_error"]
@@ -31,6 +38,12 @@ class RoleCtl(BaseCtl):
         return self.form["error"]
 
     def display(self, request, params={}):
+        role_id = int(params.get("id", 0))
+
+        if role_id > 0:
+            role = self.get_service().get(role_id)
+            self.model_to_form(role)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)

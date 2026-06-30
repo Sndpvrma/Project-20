@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 class DropdownItem:
@@ -235,3 +236,19 @@ class Patient(DropdownItem, models.Model):
 
     class Meta:
         db_table = "sos_patient"
+
+
+class Employee(DropdownItem, models.Model):
+    employee_name = models.CharField(max_length=50)
+    department = models.CharField(max_length=50)
+    salary = models.IntegerField()
+    joining_date = models.DateField(null=True, blank=True)
+
+    def get_key(self):
+        return self.id
+
+    def get_value(self):
+        return self.employee_name
+
+    class Meta:
+        db_table = "sos_employee"

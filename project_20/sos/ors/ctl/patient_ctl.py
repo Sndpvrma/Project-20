@@ -71,26 +71,6 @@ class PatientCtl(BaseCtl):
         })
         return res
 
-    # def submit(self, request, params={}):
-    #
-    #     duplicate = self.get_service().get_model().objects.filter(patient_name=self.form.get('patient_name', ''))
-    #
-    #     if duplicate.exists():
-    #         self.form['error'] = True
-    #         self.form['message'] = "Patient ID already exist"
-    #     else:
-    #         user = self.form_to_model(Patient())
-    #         self.get_service().save(user)
-    #
-    #         self.form['id'] = user.id
-    #         self.form['error'] = False
-    #         self.form['message'] = "Patient added successfully..!!"
-    #
-    #     res = render(request, self.get_template(), {
-    #         "form": self.form,
-    #         "preload_data": self.preload(request)
-    #     })
-    #     return res
 
     def submit(self, request, params={}):
 

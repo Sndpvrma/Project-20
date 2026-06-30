@@ -28,7 +28,11 @@ from .ctl.patient_ctl import PatientCtl
 from .ctl.patient_list_ctl import PatientListCtl
 from .ctl.broker_ctl import BrokerCtl
 from .ctl.broker_list_ctl import BrokerListCtl
+from .ctl.employee_ctl import EmployeeCtl
+from .ctl.employee_list_ctl import EmployeeListCtl
 from .ctl.logout_ctl import LogoutCtl
+from .ctl.forget_password_ctl import ForgetPasswordCtl
+from .ctl.change_password_ctl import ChangePasswordCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""

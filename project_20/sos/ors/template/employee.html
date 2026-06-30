@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Employee</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        <div align="center">
+            {% if form.id > 0 %}
+                <h1>Update Employee</h1>
+            {% else %}
+                <h1>Add Employee</h1>
+            {% endif %}
+
+            {% if form.error %}
+                <h3><font color="red"> {{ form.message }} </font></h3>
+            {% else %}
+                <h3><font color="green"> {{ form.message }} </font></h3>
+            {% endif %}
+
+            <table>
+                <input type="hidden" name="id" value="{{form.id}}">
+
+                <tr>
+                    <th>Employee Name:</th>
+                    <td><input type="text" name="employee_name" value="{{form.employee_name}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.employee_name }}</td>
+                </tr>
+                <tr>
+                    <th>Department:</th>
+                    <td><input type="text" name="department" value="{{form.department}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.department }}</td>
+                </tr>
+                <tr>
+                    <th>Salary:</th>
+                    <td><input type="text" name="salary" value="{{form.salary}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.salary }}</td>
+                </tr>
+                <tr>
+                    <th>Joining Date:</th>
+                    <td><input type="date" style="width: 98%" name="joining_date" value="{{form.joining_date}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.joining_date }}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        {% if form.id > 0 %}
+                            <input type="submit" value="update">
+                        {% else %}
+                            <input type="submit" value="save">
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

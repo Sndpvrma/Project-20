@@ -27,6 +27,15 @@ class CourseCtl(BaseCtl):
         obj.college_name = college.name if college else ""
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+        self.form["id"] = obj.id
+        self.form["name"] = obj.name
+        self.form["duration"] = obj.duration
+        self.form["description"] = obj.description
+        self.form["college_id"] = int(obj.college_id) if obj.college_id else 0
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form["input_error"]
@@ -49,40 +58,17 @@ class CourseCtl(BaseCtl):
 
         return self.form["error"]
     def display(self, request, params={}):
+        course_id = int(params.get("id", 0))
+
+        if course_id > 0:
+            course = self.get_service().get(course_id)
+            self.model_to_form(course)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)
         })
         return res
-
-    # def submit(self, request, params={}):
-    #
-    #     pk = int(self.form.get('id', 0))
-    #
-    #     duplicate = self.get_service().get_model().objects.filter(name=self.form.get('name', ''))
-    #
-    #     if pk > 0:
-    #         duplicate = duplicate.exclude(id=pk)
-    #
-    #     if duplicate.exists():
-    #         self.form['error'] = True
-    #         self.form['message'] = "Course already exist"
-    #     else:
-    #         course = self.form_to_model(Course())
-    #         self.get_service().save(course)
-    #         self.form['id'] = course.id
-    #         self.form['error'] = False
-    #
-    #         if pk > 0:
-    #             self.form['message'] = "Course updated successfully"
-    #         else:
-    #             self.form['message'] = "Course added successfully..!!"
-    #
-    #     res = render(request, self.get_template(), {
-    #         "form": self.form,
-    #         "preload_data": self.preload(request)
-    #     })
-    #     return res
 
     def submit(self, request, params={}):
 

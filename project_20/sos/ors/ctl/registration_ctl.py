@@ -49,6 +49,20 @@ class RegistrationCtl(BaseCtl):
 
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+        self.form["id"] = obj.id
+        self.form["first_name"] = obj.first_name
+        self.form["last_name"] = obj.last_name
+        self.form["login"] = obj.login
+        self.form["password"] = obj.password
+        self.form["dob"] = obj.dob.strftime("%Y-%m-%d") if obj.dob else ""
+        self.form["gender"] = obj.gender
+        self.form["address"] = obj.address
+        self.form["mobile_number"] = obj.mobile_number
+        self.form["role_id"] = obj.role_id
+
     def preload(self, request):
         role_list = RoleService().search({})
         gender_list = ["Male", "Female", "Other"]

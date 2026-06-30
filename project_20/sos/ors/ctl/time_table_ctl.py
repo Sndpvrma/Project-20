@@ -43,6 +43,18 @@ class TimeTableCtl(BaseCtl):
 
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+
+        self.form["id"] = obj.id
+        self.form["exam_date"] = obj.exam_date.strftime("%Y-%m-%d") if obj.exam_date else ""
+        self.form["exam_time"] = obj.exam_time
+        self.form["semester"] = obj.semester
+
+        self.form["course_id"] = int(obj.course_id) if obj.course_id else 0
+        self.form["subject_id"] = int(obj.subject_id) if obj.subject_id else 0
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form.get("input_error", {})
@@ -102,6 +114,12 @@ class TimeTableCtl(BaseCtl):
         return self.preload_data
 
     def display(self, request, params={}):
+        time_table_id = int(params.get("id", 0))
+
+        if time_table_id > 0:
+            time_table = self.get_service().get(time_table_id)
+            self.model_to_form(time_table)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)

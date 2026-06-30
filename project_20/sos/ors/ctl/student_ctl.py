@@ -39,6 +39,18 @@ class StudentCtl(BaseCtl):
 
         return obj
 
+    def model_to_form(self, obj):
+        if obj is None:
+            return
+
+        self.form["id"] = obj.id
+        self.form["first_name"] = obj.first_name
+        self.form["last_name"] = obj.last_name
+        self.form["email"] = obj.email
+        self.form["dob"] = obj.dob.strftime("%Y-%m-%d") if obj.dob else ""
+        self.form["mobile_number"] = obj.mobile_number
+        self.form["college_id"] = int(obj.college_id) if obj.college_id else 0
+
     def input_validation(self):
         super().input_validation()
         input_error = self.form.get("input_error", {})
@@ -54,9 +66,9 @@ class StudentCtl(BaseCtl):
         if DataValidator.is_null(self.form.get("email")):
             input_error["email"] = "Email can not be null"
             self.form["error"] = True
-        # elif not DataValidator.is_email(self.form.get("email")):
-        #     input_error["email"] = "Email must be a valid email address"
-        #     self.form["error"] = True
+        elif not DataValidator.is_email(self.form.get("email")):
+            input_error["email"] = "Email must be a valid email address"
+            self.form["error"] = True
 
         if DataValidator.is_null(self.form.get("dob")):
             input_error["dob"] = "Date Of Birth can not be null"
@@ -65,9 +77,9 @@ class StudentCtl(BaseCtl):
         if DataValidator.is_null(self.form.get("mobile_number")):
             input_error["mobile_number"] = "Mobile Number can not be null"
             self.form["error"] = True
-        # elif not DataValidator.is_mobile_number(self.form.get("mobile_number")):
-        #     input_error["mobile_number"] = "Mobile Number must be 10 digits"
-        #     self.form["error"] = True
+        elif not DataValidator.is_mobile_number(self.form.get("mobile_number")):
+            input_error["mobile_number"] = "Mobile Number must be 10 digits"
+            self.form["error"] = True
 
         if DataValidator.is_null(self.form.get("college_id")) or self.form.get("college_id") == "0":
             input_error["college_id"] = "College can not be null"
@@ -86,40 +98,17 @@ class StudentCtl(BaseCtl):
         return self.preload_data
 
     def display(self, request, params={}):
+        student_id = int(params.get("id", 0))
+
+        if student_id > 0:
+            student = self.get_service().get(student_id)
+            self.model_to_form(student)
+
         res = render(request, self.get_template(), {
             "form": self.form,
             "preload_data": self.preload(request)
         })
         return res
-
-    # def submit(self, request, params={}):
-    #
-    #     pk = int(self.form.get('id', 0))
-    #
-    #     duplicate = self.get_service().get_model().objects.filter(email=self.form.get('email', ''))
-    #
-    #     if pk > 0:
-    #         duplicate = duplicate.exclude(id=pk)
-    #
-    #     if duplicate.exists():
-    #         self.form['error'] = True
-    #         self.form['message'] = "Student already exist"
-    #     else:
-    #         student = self.form_to_model(Student())
-    #         self.get_service().save(student)
-    #         self.form['id'] = student.id
-    #         self.form['error'] = False
-    #
-    #         if pk > 0:
-    #             self.form['message'] = "Student updated successfully"
-    #         else:
-    #             self.form['message'] = "Student added successfully..!!"
-    #
-    #     res = render(request, self.get_template(), {
-    #         "form": self.form,
-    #         "preload_data": self.preload(request)
-    #     })
-    #     return res
 
     def submit(self, request, params={}):
 
