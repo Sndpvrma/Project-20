@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
 
+    path('', views.index),
+
     path("<str:page>/preload/", views.preload_router),
 
     # /ORS/auth/Login
@@ -25,5 +27,6 @@ urlpatterns = [
     # /ORS/ChangePassword
     path('<page>/', views.actionId),
     path('<page>/', views.actionId),
+
 
 ]

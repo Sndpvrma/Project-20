@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Manager</title>
 </head>
 <body>
     {% include "header.html" %}
@@ -10,9 +10,9 @@
         {% csrf_token %}
         <div align="center">
             {% if form.id > 0 %}
-                <h1>Update Role</h1>
+                <h1>Update Manager</h1>
             {% else %}
-                <h1>Add Role</h1>
+                <h1>Add Manager</h1>
             {% endif %}
             {% if form.error %}
                 <h3><font color="red"> {{ form.message }} </font></h3>
@@ -24,15 +24,21 @@
                 <input type="hidden" name="id" value="{{form.id}}">
 
                 <tr>
-                    <th>Name:</th>
-                    <td><input type="text" name="name" value="{{form.name}}"></td>
-                    <td style="position: fixed; color: red;">{{ form.input_error.name }}</td>
+                    <th>Manager Name:</th>
+                    <td><input type="text" name="manager_name" value="{{form.manager_name}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.manager_name }}</td>
+                </tr>
+                
+                <tr>
+                    <th>Branch Name:</th>
+                    <td><input type="text" name="branch_name" value="{{form.branch_name}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.branch_name }}</td>
                 </tr>
 
                 <tr>
-                    <th>Description:</th>
-                    <td><input type="text" name="description" value="{{form.description}}"></td>
-                    <td style="position: fixed; color: red;">{{ form.input_error.description }}</td>
+                    <th>Contact Number:</th>
+                    <td><input type="text" name="contact_number" value="{{form.contact_number}}"></td>
+                    <td style="position: fixed; color: red;">{{ form.input_error.contact_number }}</td>
                 </tr>
 
                 <tr>

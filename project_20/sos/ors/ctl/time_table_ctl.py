@@ -126,41 +126,6 @@ class TimeTableCtl(BaseCtl):
         })
         return res
 
-    # def submit(self, request, params={}):
-    #
-    #     pk = int(self.form.get('id', 0))
-    #
-    #     duplicate = self.get_service().get_model().objects.filter(
-    #         exam_date=self.form.get('exam_date'),
-    #         exam_time=self.form.get('exam_time'),
-    #         semester=self.form.get('semester'),
-    #         course_id=int(self.form.get('course_id') or 0),
-    #         subject_id=int(self.form.get('subject_id') or 0)
-    #     )
-    #
-    #     if pk > 0:
-    #         duplicate = duplicate.exclude(id=pk)
-    #
-    #     if duplicate.exists():
-    #         self.form['error'] = True
-    #         self.form['message'] = "TimeTable already exist"
-    #     else:
-    #         timetable = self.form_to_model(TimeTable())
-    #         self.get_service().save(timetable)
-    #         self.form['id'] = timetable.id
-    #         self.form['error'] = False
-    #
-    #         if pk > 0:
-    #             self.form['message'] = "TimeTable updated successfully"
-    #         else:
-    #             self.form['message'] = "TimeTable added successfully..!!"
-    #
-    #     res = render(request, self.get_template(), {
-    #         "form": self.form,
-    #         "preload_data": self.preload(request)
-    #     })
-    #     return res
-
     def submit(self, request, params={}):
 
         duplicate = self.get_service().get_model().objects.filter(

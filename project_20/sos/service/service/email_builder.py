@@ -20,7 +20,7 @@ class EmailBuilder:
     #build change password message
     @staticmethod
     def change_password(params):
-        dir =  EmailBuilder.template_dir + "changepassword.html"
+        dir =  EmailBuilder.template_dir / "changepassword.html"
         #open the file
         filein = open(dir)
         #read it

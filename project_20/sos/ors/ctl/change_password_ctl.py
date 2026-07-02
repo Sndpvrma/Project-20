@@ -36,8 +36,11 @@ class ChangePasswordCtl(BaseCtl):
         return render(request, self.get_template(), {"form": self.form})
 
     def submit(self, request, params={}):
-        login_id = request.session.get("login_id")
-        user = self.get_service().get(login_id)
+        # login_id = request.session.get("login_id")
+        # user = self.get_service().get(login_id)
+
+        user_id = request.session.get("user_id")
+        user = self.get_service().get(user_id)
         if user is None:
             self.form["error"] = True
             self.form["message"] = "Session expired. Please login again."

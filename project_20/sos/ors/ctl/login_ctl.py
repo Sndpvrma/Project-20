@@ -41,7 +41,7 @@ class LoginCtl(BaseCtl):
             request.session["login_id"] = user.login
             request.session["first_name"] = user.first_name
             request.session["last_name"] = user.last_name
-            res = redirect('/dm/welcome')
+            res = redirect('/ors/Welcome')
         return res
 
     def get_template(self):

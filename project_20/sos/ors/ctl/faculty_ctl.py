@@ -95,9 +95,9 @@ class FacultyCtl(BaseCtl):
             input_error["email"] = "Email can not be null"
             self.form["error"] = True
 
-        # elif not DataValidator.is_email(self.form.get("email")):
-        #     input_error["email"] = "Email must be a valid email address"
-        #     self.form["error"] = True
+        elif not DataValidator.is_email(self.form.get("email")):
+            input_error["email"] = "Email must be a valid email address"
+            self.form["error"] = True
         if DataValidator.is_null(self.form.get("password")):
             input_error["password"] = "Password can not be null"
             self.form["error"] = True

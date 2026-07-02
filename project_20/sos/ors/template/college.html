@@ -9,7 +9,11 @@
     <form method="POST">
         {% csrf_token %}
         <div align="center">
-            <h1>Add College</h1>
+            {% if form.id > 0 %}
+                <h1>Update College</h1>
+            {% else %}
+                <h1>Add College</h1>
+            {% endif %}
             {% if form.error %}
                 <h3><font color="red">{{ form.message }}</font></h3>
             {% else %}
@@ -44,7 +48,13 @@
                 </tr>
                 <tr>
                     <th></th>
-                    <td><input type="submit" value="save"></td>
+                    <td>
+                        {% if form.id > 0 %}
+                            <input type="submit" value="update">
+                        {% else %}
+                            <input type="submit" value="save">
+                        {% endif %}
+                    </td>
                 </tr>
             </table>
         </div>

@@ -30,6 +30,8 @@ from .ctl.broker_ctl import BrokerCtl
 from .ctl.broker_list_ctl import BrokerListCtl
 from .ctl.employee_ctl import EmployeeCtl
 from .ctl.employee_list_ctl import EmployeeListCtl
+from .ctl.manager_ctl import ManagerCtl
+from .ctl.manager_list_ctl import ManagerListCtl
 from .ctl.logout_ctl import LogoutCtl
 from .ctl.forget_password_ctl import ForgetPasswordCtl
 from .ctl.change_password_ctl import ChangePasswordCtl
@@ -94,3 +96,6 @@ def preload_router(request, page):
     data = ctlObj.preload(request)
     return JsonResponse(data)
 
+def index(request):
+    res = render(request, 'welcome.html')
+    return res

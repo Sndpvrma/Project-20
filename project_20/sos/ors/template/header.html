@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+{% if request.session.user_id == None %}
 <h3>Hi, Guest</h3>
 <a href="/ORS/Welcome/"><b>Welcome</b></a> <b>|</b>
-<a href="/ORS/Role/"><b>Add Role</b></a> <b>|</b>
-<a href="/ORS/RoleList/"><b>Role List</b></a> |
+<a href="/ORS/Login/"><b>Login</b></a>
+{% else %}
+<h3>Hi, {{ request.session.first_name }}</h3>
 <a href="/ORS/Registration/"><b>Registration</b></a> <b>|</b>
-<a href="/ORS/Login/"><b>Login</b></a> <b>|</b>
 <a href="/ORS/User/"><b>Add User</b></a> <b>|</b>
 <a href="/ORS/UserList/"><b>User List</b></a> |
+<a href="/ORS/Role/"><b>Add Role</b></a> <b>|</b>
+<a href="/ORS/RoleList/"><b>Role List</b></a> |
 <a href="/ORS/College/"><b>Add College</b></a> <b>|</b>
 <a href="/ORS/CollegeList/"><b>College List</b></a> <b>|</b>
 <a href="/ORS/Course/"><b>Add Course</b></a> <b>|</b>
@@ -33,8 +38,16 @@
 <a href="/ORS/PatientList/"><b>Patient List</b></a> <b>|</b>
 <a href="/ORS/Employee/"><b>Add Employee</b></a> <b>|</b>
 <a href="/ORS/EmployeeList/"><b>Employee List</b></a> <b>|</b>
+<a href="/ORS/Manager/"><b>Add Manager</b></a> <b>|</b>
+<a href="/ORS/ManagerList/"><b>Manager List</b></a> <b>|</b>
 <a href="/ORS/ChangePassword/"><b>Change Password</b></a> |
 <a href="/ORS/Logout/"><b>Logout</b></a>
+{% endif %}
 <hr>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<!--Used for icon-->
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </body>
 </html>

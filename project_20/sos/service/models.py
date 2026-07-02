@@ -252,3 +252,17 @@ class Employee(DropdownItem, models.Model):
 
     class Meta:
         db_table = "sos_employee"
+
+class Manager(DropdownItem, models.Model):
+    manager_name = models.CharField(max_length=50)
+    branch_name = models.CharField(max_length=50)
+    contact_number = models.CharField(max_length=50)
+
+    def get_key(self):
+        return self.id
+
+    def get_value(self):
+        return self.maanger_name
+
+    class Meta:
+        db_table = "sos_manager"
