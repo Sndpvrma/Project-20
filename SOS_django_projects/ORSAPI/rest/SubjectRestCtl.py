@@ -1,0 +1,51 @@
+﻿from rest_framework.response import Response
+from rest_framework.views import APIView
+from ORSAPI.rest.BaseRestCtl import BaseRestCtl
+from service.models import Subject, Course
+from service.Serializers import SubjectSerializers
+from service.service.SubjectService import SubjectService
+from service.utility.DataValidator import DataValidator
+
+
+class SubjectRestCtl(BaseRestCtl):
+    def get_model(self):
+        return Subject
+
+    def get_service(self):
+        return SubjectService()
+
+    def get_serializer_class(self):
+        return SubjectSerializers
+
+    def input_validation(self, data):
+        errors = {}
+
+        subject_name = data.get("name", "")
+        subject_desc = data.get("description", "")
+        course_id = data.get("course_ID", "")
+
+        if DataValidator.isNull(subject_name):
+            errors["name"] = "Subject Name cannot be null"
+        elif not DataValidator.isMaxLength(subject_name, 50):
+            errors["name"] = "Subject Name cannot exceed 50 characters"
+
+        if DataValidator.isNull(subject_desc):
+            errors["description"] = "Subject Description cannot be null"
+        elif not DataValidator.isMaxLength(subject_desc, 200):
+            errors["description"] = "Subject Description cannot exceed 200 characters"
+
+        if DataValidator.isNull(course_id):
+            errors["course_ID"] = "Course cannot be null"
+        elif not DataValidator.isInteger(course_id):
+            errors["course_ID"] = "Course ID must be a valid integer"
+        elif int(course_id) <= 0:
+            errors["course_ID"] = "Course ID must be a positive integer"
+
+        return errors
+
+
+class SubjectPreloadRestCtl(APIView):
+    def get(self, _request):
+        courses = [{"id": c.get_key(), "value": c.get_value()} for c in Course.objects.order_by("name")]
+        data = {"courses": courses}
+        return Response({"error": False, "message": "", "data": data})

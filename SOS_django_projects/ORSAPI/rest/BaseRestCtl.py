@@ -1,0 +1,266 @@
+import logging
+import os
+from abc import ABC, abstractmethod
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
+from django.http import FileResponse, Http404
+from service.dao.BaseDAO import DuplicateValueError
+
+logger = logging.getLogger(__name__)
+
+
+class BaseRestCtl(APIView, ABC):
+    """Abstract base class inherited by all REST API controllers."""
+
+    @abstractmethod
+    def get_model(self):
+        """Return the Django model class for this controller."""
+        pass
+
+    @abstractmethod
+    def get_service(self):
+        """Return an instance of the service for this controller."""
+        pass
+
+    def input_validation(self, _data):
+        """Perform manual field validation on request data. Return a dict of {field: error} or {}."""
+        return {}
+
+    @abstractmethod
+    def get_serializer_class(self):
+        """Return the DRF serializer class for this controller."""
+        pass
+
+    def get_resource_name(self):
+        """Return a display name used in response messages; defaults to the model class name."""
+        return self.get_model().__name__
+
+    # --- Response helpers ---
+
+    def success_response(
+        self, data=None, message="", stcode=status.HTTP_200_OK, pagination=None
+    ):
+        res_data = {
+            "error": False,
+            "message": message,
+            "data": data,
+        }
+        if pagination is not None:
+            res_data["pagination"] = pagination
+        return Response(res_data, status=stcode)
+
+    def error_response(
+        self, errors=None, message="", stcode=status.HTTP_400_BAD_REQUEST
+    ):
+        res_data = {
+            "error": True,
+            "message": message,
+            "errors": errors,
+        }
+        return Response(res_data, status=stcode)
+
+    # --- Default CRUD implementations ---
+
+    def get(self, request, id=None):
+        """Return a single record by id, or a (optionally filtered) list when id is omitted.
+
+        When id is omitted and the request carries a JSON body, each key/value
+        pair is forwarded to service.search() so the caller can narrow results
+        without a dedicated search endpoint.
+        """
+        logger.info("%s.get() id=%s", self.__class__.__name__, id)
+        service = self.get_service()
+        serializer_class = self.get_serializer_class()
+
+        # if id received return one record, else search with optional filters from request body
+        if id:
+            obj = service.get(id)
+            if obj is None:
+                return self.error_response(
+                    None, "Object not found", status.HTTP_404_NOT_FOUND
+                )
+            return self.success_response(serializer_class(obj).data)
+
+        # If request.data is not a dict, filters will be empty and all records returned
+        filters = request.data if isinstance(request.data, dict) else {}
+        queryset = service.search(filters)
+
+        return self.success_response(serializer_class(queryset, many=True).data)
+
+    @classmethod
+    def search_view(cls):
+        """Return an as_view() entry where POST routes to search() instead of create."""
+
+        class _SearchView(cls):
+            def post(self, request, *args, **kwargs):
+                return self.search(request)
+
+        _SearchView.__name__ = f"{cls.__name__}SearchView"
+        return _SearchView.as_view()
+
+    def pdfReport(self, request, result):
+        from io import BytesIO
+        from django.http import HttpResponse
+        from reportlab.lib.pagesizes import A4, landscape
+        from reportlab.lib import colors
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib.units import cm
+        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
+        objects = list(result.object_list if hasattr(result, "object_list") else result)
+        data = self.get_serializer_class()(objects, many=True).data
+
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(
+            buffer,
+            pagesize=landscape(A4),
+            rightMargin=1 * cm,
+            leftMargin=1 * cm,
+            topMargin=1.5 * cm,
+            bottomMargin=1 * cm,
+        )
+
+        styles = getSampleStyleSheet()
+        elements = [
+            Paragraph(f"{self.get_resource_name()} Report", styles["Title"]),
+            Spacer(1, 0.5 * cm),
+        ]
+
+        if not data:
+            elements.append(Paragraph("No records found.", styles["Normal"]))
+        else:
+            headers = list(data[0].keys())
+            header_row = [h.replace("_", " ").title() for h in headers]
+            table_data = [header_row] + [
+                [str(row.get(h, "")) for h in headers] for row in data
+            ]
+
+            page_width = landscape(A4)[0] - 2 * cm
+            col_width = page_width / len(headers)
+
+            table = Table(table_data, colWidths=[col_width] * len(headers), repeatRows=1)
+            table.setStyle(TableStyle([
+                ("BACKGROUND",    (0, 0), (-1, 0),  colors.HexColor("#2C3E50")),
+                ("TEXTCOLOR",     (0, 0), (-1, 0),  colors.white),
+                ("FONTNAME",      (0, 0), (-1, 0),  "Helvetica-Bold"),
+                ("FONTSIZE",      (0, 0), (-1, 0),  9),
+                ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+                ("TOPPADDING",    (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                ("FONTNAME",      (0, 1), (-1, -1), "Helvetica"),
+                ("FONTSIZE",      (0, 1), (-1, -1), 8),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#ECF0F1")]),
+                ("GRID",          (0, 0), (-1, -1), 0.5, colors.HexColor("#BDC3C7")),
+                ("BOX",           (0, 0), (-1, -1), 1,   colors.HexColor("#2C3E50")),
+            ]))
+            elements.append(table)
+
+        doc.build(elements)
+        buffer.seek(0)
+
+        resource_name = self.get_resource_name()
+        response = HttpResponse(buffer, content_type="application/pdf")
+        response["Content-Disposition"] = f'inline; filename="{resource_name}_report.pdf"'
+        return response
+
+    def pdfDoc(self, request, result):
+        print("Generating DOC report...")
+        doc_path = os.path.join(settings.MEDIA_ROOT, "test.docx")
+        if not os.path.exists(doc_path):
+            raise Http404("DOC file not found")
+        return FileResponse(open(doc_path, "rb"), content_type="application/msword")
+
+    def search(self, request):
+        filters = dict(request.data) if isinstance(request.data, dict) else {}
+
+        report_type = filters.pop("reportType", "html").lower()
+        print(f"Report type: {report_type}")
+        page_number = int(filters.pop("pageNo", 0) or 0)
+        page_size = int(filters.pop("pageSize", 10) or 10)
+
+        # BaseService.search mutates filters to set has_next/has_previous when paginated
+        result = self.get_service().search(
+            filters, page_number=page_number, page_size=page_size
+        )
+
+        if report_type == "pdf":
+            print("Generating PDF report...")
+            return self.pdfReport(request,result)
+
+        if report_type == "doc":
+            print("Generating DOC report...")
+            return self.pdfDoc(request,result)
+
+        # When paginated, result is a Django Page object; extract the record list
+        if page_number:
+            objects = result.object_list
+            pagination = {
+                "has_next": filters.get("has_next", False),
+                "has_previous": filters.get("has_previous", False),
+                "start_index": filters.get("start_index", 0),
+                "end_index": filters.get("end_index", 0),
+            }
+        else:
+            objects = result
+            pagination = None
+
+        return self.success_response(
+            self.get_serializer_class()(objects, many=True).data,
+            pagination=pagination,
+        )
+
+    def post(self, request):
+        """Validate and create a new record; return 201 on success or 400 on validation failure."""
+        logger.info("%s.post()", self.__class__.__name__)
+        errors = self.input_validation(request.data)
+        if errors:
+            return self.error_response(errors, "Validation failed")
+
+        obj = self.get_model()(**request.data)
+        try:
+            self.get_service().save(obj)
+        except DuplicateValueError as e:
+            return self.error_response(None, str(e))
+        msg = f"{self.get_resource_name()} saved successfully"
+        return self.success_response(
+            self.get_serializer_class()(obj).data,
+            msg,
+            status.HTTP_201_CREATED,
+        )
+
+    def put(self, request, id):
+        """Validate and update an existing record by id; return 404 if not found or 400 on validation failure."""
+        logger.info("%s.put() id=%s", self.__class__.__name__, id)
+        service = self.get_service()
+        obj = service.get(id)
+        if obj is None:
+            msg = f"{self.get_resource_name()} not found"
+            return self.error_response(None, msg, status.HTTP_404_NOT_FOUND)
+
+        errors = self.input_validation(request.data)
+        if errors:
+            return self.error_response(errors, "Validation failed")
+
+        for field, value in request.data.items():
+            setattr(obj, field, value)
+        try:
+            service.save(obj)
+        except DuplicateValueError as e:
+            return self.error_response(None, str(e))
+        msg = f"{self.get_resource_name()} updated successfully"
+        return self.success_response(self.get_serializer_class()(obj).data, msg)
+
+    def delete(self, request, id):
+        """Delete a record by id; return 404 if not found."""
+        logger.info("%s.delete() id=%s", self.__class__.__name__, id)
+        service = self.get_service()
+        obj = service.get(id)
+        if obj is None:
+            msg = f"{self.get_resource_name()} not found"
+            return self.error_response(None, msg, status.HTTP_404_NOT_FOUND)
+        service.delete(id)
+        msg = f"{self.get_resource_name()} deleted successfully"
+        return self.success_response(None, msg)

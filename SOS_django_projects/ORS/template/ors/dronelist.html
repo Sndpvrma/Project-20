@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drone List</title>
+
+    <!-- Bootstrap 4 -->
+
+</head>
+<body>
+
+{% include './Header.html' %}
+
+<div class="container-fluid mt-4">
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="text-center mb-4">
+        <h2>Drone List</h2>
+    </div>
+
+    {% if form.list|length > 0 %}
+
+    <!-- Search -->
+    <div class="row justify-content-center mb-3">
+
+        <div class="col-md-4">
+            <input type="text"
+                   name="droneId"
+                   class="form-control"
+                   placeholder="Enter drone Id"
+                   value="{{ form.drone_id }}">
+        </div>
+
+        <div class="col-md-2">
+            <input type="submit"
+                   name="operation"
+                   value="search"
+                   class="btn btn-primary btn-block">
+        </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover table-dark text-center">
+
+            <thead class="thead-light">
+
+            <tr>
+                <th>S No.</th>
+                <th>Drone Id</th>
+                <th>Drone Code</th>
+                <th>Operator Name</th>
+                <th>Delivery Zone</th>
+                <th>Status</th>
+                <th>Edit | Delete</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for l in form.list %}
+
+            <tr>
+
+                <td>{{ forloop.counter }}</td>
+                <td>{{ l.drone_id }}</td>
+                <td>{{ l.drone_code }}</td>
+                <td>{{ l.operator_name }}</td>
+                <td>{{ l.delivery_zone }}</td>
+                <td>{{ l.status }}</td>
+
+                <td>
+                    <a href="/ORS/Drone/edit/{{l.id}}/" class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a href="/ORS/DroneList/delete/{{l.id}}/" class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Pagination -->
+   <div class="row mt-3">
+
+    <div class="col-md-6">
+
+        <input type="submit"
+               name="operation"
+               value="previous"
+               class="btn btn-secondary"
+               {% if not form.has_previous %}disabled{% endif %}>
+
+    </div>
+
+    <div class="col-md-6 text-right">
+
+        <input type="submit"
+               name="operation"
+               value="next"
+               class="btn btn-secondary"
+               {% if not form.has_next %}disabled{% endif %}>
+
+    </div>
+
+</div>
+
+
+
+    {% else %}
+
+    <div class="text-center">
+
+        <h3 class="text-danger">No Record Found</h3>
+
+        <input type="submit"
+               value="back"
+               class="btn btn-primary">
+
+    </div>
+
+    {% endif %}
+
+</form>
+
+</div>
+
+{% include "./Footer.html"%}
+
+</body>
+</html>

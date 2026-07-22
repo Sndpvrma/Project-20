@@ -1,0 +1,8 @@
+Django
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+django-db-connection-pool
+xhtml2pdf
+xlwt
+mysqlclient

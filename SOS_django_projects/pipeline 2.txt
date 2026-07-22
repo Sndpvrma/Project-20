@@ -1,0 +1,92 @@
+pipeline {
+    agent any
+
+    environment {
+        PYTHON = "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python313\\python.exe"
+        VENV = "venv"
+        PROJECT = "sos"
+    }
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/sndpvrma/Project_20_practice.git'
+            }
+        }
+
+        stage('Check Workspace') {
+            steps {
+                bat '''
+                cd
+                dir
+                dir /s requirements.txt
+                dir /s manage.py
+                '''
+            }
+        }
+
+        stage('Create Virtual Environment') {
+            steps {
+                bat '''
+                "%PYTHON%" -m venv %VENV%
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir("${PROJECT}") {
+                    bat '''
+                    call ..\\%VENV%\\Scripts\\activate.bat
+                    python -m pip install --upgrade pip
+                    python -m pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Run Migrations') {
+            steps {
+                dir("${PROJECT}") {
+                    bat '''
+                    call ..\\%VENV%\\Scripts\\activate.bat
+                    python manage.py makemigrations
+                    python manage.py migrate
+                    '''
+                }
+            }
+        }
+
+        stage('Run Django Server') {
+            steps {
+                dir("${PROJECT}") {
+                    // JENKINS_NODE_COOKIE lagane se pipeline khatam hone ke baad bhi server chalta rahega
+                    withEnv(['JENKINS_NODE_COOKIE=dontKillMe']) {
+                        bat '''
+                        call ..\\%VENV%\\Scripts\\activate.bat
+                        
+                        :: start /B server ko background mein bhejega aur --noreload loop ko rokega
+                        start /B python manage.py runserver 0.0.0.0:8000 --noreload
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+   post {
+        always {
+            echo 'Pipeline Completed'
+        }
+
+        success {
+            echo 'Django Project Started Successfully'
+        }
+
+        failure {
+            echo 'Pipeline Failed'
+        }
+    }
+}
