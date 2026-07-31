@@ -240,3 +240,33 @@ class Department(models.Model):
 
     class Meta:
         db_table = "sos_department"
+
+class Scholarship(models.Model):
+    scholarship_id = models.IntegerField()
+    scholarship_name = models.CharField(max_length=50)
+    amount = models.IntegerField()
+    eligibility = models.CharField(max_length=50)
+    last_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        db_table = "sos_scholarship"
+
+class Insurance(models.Model):
+    policy_id = models.IntegerField()
+    policy_holder_name = models.CharField(max_length=50)
+    policy_type = models.CharField(max_length=50)
+    premium_amount = models.IntegerField()
+    expiry_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        db_table = "sos_insurance"
+
+class Exam(models.Model):
+    exam_id = models.IntegerField()
+    exam_name = models.CharField(max_length=50)
+    exam_date = models.DateField(null=True, blank=True)
+    total_marks = models.CharField(max_length=50)
+    passing_marks = models.IntegerField()
+
+    class Meta:
+        db_table = "sos_exam"

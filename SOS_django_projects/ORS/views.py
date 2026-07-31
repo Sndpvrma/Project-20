@@ -38,7 +38,12 @@ from ORS.ctl.weather_alert_ctl import WeatherAlertCtl
 from ORS.ctl.weather_alert_list_ctl import WeatherAlertListCtl
 from ORS.ctl.department_ctl import DepartmentCtl
 from ORS.ctl.department_list_ctl import DepartmentListCtl
-
+from ORS.ctl.Scholarship_ctl import ScholarshipCtl
+from ORS.ctl.Scholarship_list_ctl import ScholarshipListCtl
+from ORS.ctl.insurance_ctl import InsuranceCtl
+from ORS.ctl.insurance_list_ctl import InsuranceListCtl
+from ORS.ctl.Exam_ctl import ExamCtl
+from ORS.ctl.Exam_list_ctl import ExamListCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""

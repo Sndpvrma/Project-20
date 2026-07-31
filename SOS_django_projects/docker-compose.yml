@@ -10,8 +10,8 @@ services:
     environment:
       DB_HOST: database
       DB_NAME: sos_20
-      DB_USER: root          
-      DB_PASSWORD: root_pass
+      DB_USER: root            # Django के लिए root यूजर रहेगा
+      DB_PASSWORD: root_pass  # 👈 यहाँ 'root_pass' लिखें जो नीचे सेट किया है
     depends_on:
       database:
         condition: service_healthy
@@ -22,12 +22,11 @@ services:
     container_name: sos_django_projects-db-1
     environment:
       MYSQL_DATABASE: sos_20
-      MYSQL_USER: django_user
-      MYSQL_PASSWORD: django_pass
-      MYSQL_ROOT_PASSWORD: root_pass  
-     
+      MYSQL_ROOT_PASSWORD: root_pass  # 👈 केवल इसे ही मुख्य पासवर्ड रहने दें
+      # ⚠️ ध्यान दें: यहाँ से MYSQL_USER और MYSQL_PASSWORD हटा दिया गया है
     volumes:
       - mysql_data:/var/lib/mysql
+    # 👇 हेल्थचेक में root_pass पासवर्ड देना ज़रूरी है ताकि ping काम करे
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot_pass"]
       interval: 10s

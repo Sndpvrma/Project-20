@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Exam Form</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        .text-danger{
+            display:block;
+            min-height:20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+{% include './Header.html' %}
+
+<div class="container mt-5 mb-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-md-10">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="text-center mb-0">
+
+                        {% if form.id > 0 %}
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Update Exam
+                        {% else %}
+                        <i class="fa-solid fa-building-column"></i>
+                        Add Exam
+                        {% endif %}
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {% if form.message %}
+
+                        {% if form.error %}
+
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                            <i class="fa-solid fa-circle-xmark text-danger"></i>
+                            {{ form.message }}
+
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="alert"
+                                    aria-label="Close">
+
+                                <span aria-hidden="true">&times;</span>
+
+                            </button>
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                            {{ form.message }}
+
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="alert"
+                                    aria-label="Close">
+
+                                <span aria-hidden="true">&times;</span>
+
+                            </button>
+
+                        </div>
+
+                        {% endif %}
+
+                        {% endif %}
+
+                        <input type="hidden" name="id" value="{{ form.id }}">
+
+                        <!-- Row 1 -->
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-id-card text-primary"></i>
+                                    <strong>Exam Id:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="examId"
+                                       value="{{ form.exam_id }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.exam_id }}
+                                </small>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-award text-success"></i>
+                                    <strong>Exam Name</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="examName"
+                                       value="{{ form.exam_name }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.exam_name }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Row 2 -->
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-calendar-days text-primary"></i>
+                                    <strong>Exam Date: </strong>
+                                </label>
+
+                                <input type="date"
+                                       name="examDate"
+                                       value="{{ form.exam_date }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.exam_date }}
+                                </small>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-indian-rupee-sign text-primary"></i>
+                                    <strong>Total Marks:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="totalMarks"
+                                       value="{{ form.total_marks }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.total_marks }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Row 3 -->
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-graduation-cap text-success"></i>
+                                    <strong>Passing Marks:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="passingMarks"
+                                       value="{{ form.passing_marks }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.passing_marks }}
+                                </small>
+
+                            </div>
+
+                        </div>
+                        <hr>
+
+                        <div class="text-center">
+
+                            {% if form.id > 0 %}
+
+                            <input type="submit"
+                                   name="operation"
+                                   value="update"
+                                   class="btn btn-primary">
+
+                            <a href="/ORS/ExamList" class="btn btn-secondary">
+
+                                <i class="fa-solid fa-list"></i>
+                                List
+
+                            </a>
+
+                            {% else %}
+
+                            <input type="submit"
+                                   name="operation"
+                                   value="save"
+                                   class="btn btn-success">
+
+                            <a href="/ORS/Exam" class="btn btn-warning">
+
+                                <i class="fa-solid fa-rotate-right"></i>
+                                Reset
+
+                            </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% include "./Footer.html"%}
+
+</body>
+</html>

@@ -1,8 +1,18 @@
-Django
+# Django Core & Security
+Django>=4.0
 django-cors-headers
+
+# API & Authentication
 djangorestframework
 djangorestframework-simplejwt
-django-db-connection-pool
+
+# Database Drivers & Connection Pooling (MySQL/MariaDB)
+mysqlclient==2.2.7
+django-db-connection-pool[mysql]
+
+# PDF & Excel Export Utilities
 xhtml2pdf
 xlwt
-mysqlclient
+
+# Common Utilities
+pillow

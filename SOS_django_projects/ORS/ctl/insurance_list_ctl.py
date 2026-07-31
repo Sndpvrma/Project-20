@@ -1,18 +1,18 @@
 from django.shortcuts import render, redirect
 
-from service.service.DepartmentService import DepartmentService
+from service.service.InsuranceService import InsuranceService
 from .BaseCtl import BaseCtl
 
 
 
-class DepartmentListCtl(BaseCtl):
+class InsuranceListCtl(BaseCtl):
 
     def request_to_form(self, requestForm):
-        self.form['department_id'] = requestForm.get('departmentId')
+        self.form['policy_id'] = requestForm.get('policyId')
 
     def display(self, request, params={}):
-        department_list = self.get_service().search(self.form)
-        self.form['list'] = department_list
+        insurance_list = self.get_service().search(self.form)
+        self.form['list'] = insurance_list
         return render(request, self.get_template(), {'form': self.form})
 
     def submit(self, request, params={}):
@@ -26,12 +26,12 @@ class DepartmentListCtl(BaseCtl):
         if request.POST.get('operation', '') == "search":
             self.form['page_number'] = 1
 
-        department_list = self.get_service().search(self.form)
-        self.form['list'] = department_list
+        insurance_list = self.get_service().search(self.form)
+        self.form['list'] = insurance_list
         return render(request, self.get_template(), {'form': self.form})
 
     def get_service(self):
-        return DepartmentService()
+        return InsuranceService()
 
     def get_template(self):
-        return 'ors/departmentList.html'
+        return 'ors/insuranceList.html'

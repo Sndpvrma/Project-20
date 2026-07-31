@@ -1,18 +1,18 @@
 from django.shortcuts import render, redirect
 
-from service.service.DepartmentService import DepartmentService
+from service.service.ScholarshipService import ScholarshipService
 from .BaseCtl import BaseCtl
 
 
 
-class DepartmentListCtl(BaseCtl):
+class ScholarshipListCtl(BaseCtl):
 
     def request_to_form(self, requestForm):
-        self.form['department_id'] = requestForm.get('departmentId')
+        self.form['scholarship_id'] = requestForm.get('scholarshipId')
 
     def display(self, request, params={}):
-        department_list = self.get_service().search(self.form)
-        self.form['list'] = department_list
+        scholarship_list = self.get_service().search(self.form)
+        self.form['list'] = scholarship_list
         return render(request, self.get_template(), {'form': self.form})
 
     def submit(self, request, params={}):
@@ -26,12 +26,12 @@ class DepartmentListCtl(BaseCtl):
         if request.POST.get('operation', '') == "search":
             self.form['page_number'] = 1
 
-        department_list = self.get_service().search(self.form)
-        self.form['list'] = department_list
+        drone_list = self.get_service().search(self.form)
+        self.form['list'] = drone_list
         return render(request, self.get_template(), {'form': self.form})
 
     def get_service(self):
-        return DepartmentService()
+        return ScholarshipService()
 
     def get_template(self):
-        return 'ors/departmentList.html'
+        return 'ors/scholarshipList.html'
