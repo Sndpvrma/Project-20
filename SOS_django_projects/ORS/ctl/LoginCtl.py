@@ -31,31 +31,31 @@ class LoginCtl(BaseCtl):
         return render(request,self.get_template(),{"form":self.form})
 
     def submit(self,request,params={}):
-        if(self.input_validation()):
-            return render(request,self.get_template(),{"form":self.form})
-        else:     
-            user = self.get_service().authenticate(self.form)
-            if(user is None):
-                self.form["message"] = "Invalid ID or Password"
-                res = render(request,self.get_template(),{"form":self.form})
+
+        user = self.get_service().authenticate(self.form)
+
+        if (user is None):
+            self.form["error"] = True
+            self.form["message"] = "Invalid Login or Password"
+            res = render(request, self.get_template(), {"form": self.form})
+        else:
+            if self.form.get("rememberMe"):
+                request.session.set_expiry(30 * 24 * 60 * 60)  # 30 days
             else:
-                if self.form.get("rememberMe"):
-                    request.session.set_expiry(30 * 24 * 60 * 60)  # 30 days
-                else:
-                    request.session.set_expiry(0)  # expires when browser closes
-                request.session["user"] = user.login
-                request.session["loginId"] = user.id
-                request.session["firstName"] = user.firstName
-                request.session["lastName"] = user.lastName
-                res = redirect('/ORS/Welcome')
+                request.session.set_expiry(0)  # expires when browser closes
+            request.session["user"] = user.login
+            request.session["loginId"] = user.id
+            request.session["firstName"] = user.firstName
+            request.session["lastName"] = user.lastName
+            res = redirect('/ORS/Welcome')
         return res
 
     # Template html of Role page    
     def get_template(self):
-        return "ors/Login.html"        
+        return "ors/Login.html"
 
-    # Service of Role     
+    # Service of Role
     def get_service(self):
-        return UserService()        
+        return UserService()
 
 

@@ -75,6 +75,7 @@ class RegistrationCtl(BaseCtl):
         if DataValidator.isNull(self.form.get("login")):
             inputError["login"] = "Login can not be null"
             self.form["error"] = True
+
         elif not DataValidator.isEmail(self.form.get("login")):
             inputError["login"] = "Login must be a valid email address"
             self.form["error"] = True
@@ -86,6 +87,7 @@ class RegistrationCtl(BaseCtl):
         if DataValidator.isNull(self.form.get("mobileNumber")):
             inputError["mobileNumber"] = "Mobile Number can not be null"
             self.form["error"] = True
+
         elif not DataValidator.isMobileNumber(self.form.get("mobileNumber")):
             inputError["mobileNumber"] = "Mobile Number must be 10 digits"
             self.form["error"] = True

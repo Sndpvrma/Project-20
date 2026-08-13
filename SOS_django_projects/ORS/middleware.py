@@ -4,6 +4,8 @@ PUBLIC_URLS = [
     '/ORS/auth/Login',
     '/ORS/auth/ForgetPassword',
     '/ORS/auth/Registration',
+    '/ORS/Registration',
+    '/ORS/Registration/',
 ]
 
 

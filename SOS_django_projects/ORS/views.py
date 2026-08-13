@@ -44,6 +44,8 @@ from ORS.ctl.insurance_ctl import InsuranceCtl
 from ORS.ctl.insurance_list_ctl import InsuranceListCtl
 from ORS.ctl.Exam_ctl import ExamCtl
 from ORS.ctl.Exam_list_ctl import ExamListCtl
+from ORS.ctl.vendor_ctl import VendorCtl
+from ORS.ctl.vendor_list_ctl import VendorListCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""
@@ -87,9 +89,11 @@ def actionId(request, page, id=0):
 
 @csrf_exempt
 def auth_action(request, page):
+    formatted_page = page.capitalize()
+
     """Route an authentication request (login, registration, etc.) to the matching controller."""
     print("Auth Action------------------>", page)
     info(request, page, 0)
-    ctlName = page + "Ctl()"
+    ctlName = formatted_page + "Ctl()"
     ctlObj = eval(ctlName)
     return ctlObj.execute(request, {})

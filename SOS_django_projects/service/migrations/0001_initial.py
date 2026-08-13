@@ -104,17 +104,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Role',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('description', models.CharField(max_length=500)),
-            ],
-            options={
-                'db_table': 'SOS_ROLE',
-            },
-        ),
-        migrations.CreateModel(
             name='Student',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

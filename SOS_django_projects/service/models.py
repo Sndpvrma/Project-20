@@ -270,3 +270,13 @@ class Exam(models.Model):
 
     class Meta:
         db_table = "sos_exam"
+
+class Vendor(models.Model):
+    vendor_id = models.IntegerField()
+    vendor_name = models.CharField(max_length=50)
+    mobile_no = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    service_type = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_vendor"
