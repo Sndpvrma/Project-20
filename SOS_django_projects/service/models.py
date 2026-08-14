@@ -280,3 +280,13 @@ class Vendor(models.Model):
 
     class Meta:
         db_table = "sos_vendor"
+
+class Library(models.Model):
+    library_id = models.IntegerField()
+    library_name = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    total_books = models.CharField(max_length=50)
+    contact_no = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_library"

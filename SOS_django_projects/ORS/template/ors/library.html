@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Form</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        .text-danger{
+            display:block;
+            min-height:20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+{% include './Header.html' %}
+
+<div class="container mt-5 mb-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-md-10">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="text-center mb-0">
+
+                        {% if form.id > 0 %}
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Update Library
+                        {% else %}
+                            <i class="fa-solid fa-user-plus"></i>
+                            Add Library
+                        {% endif %}
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        {% if form.message %}
+
+                            {% if form.error %}
+
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+                                <i class="fa-solid fa-circle-xmark text-danger"></i>
+                                {{ form.message }}
+
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="alert"
+                                        aria-label="Close">
+
+                                    <span aria-hidden="true">&times;</span>
+
+                                </button>
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                                {{ form.message }}
+
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="alert"
+                                        aria-label="Close">
+
+                                    <span aria-hidden="true">&times;</span>
+
+                                </button>
+
+                            </div>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                        <input type="hidden" name="id" value="{{ form.id }}">
+
+                        <!-- Row 1 -->
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-id-card text-primary"></i>
+                                    <strong>Library Id:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="libraryId"
+                                       value="{{ form.library_id }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.library_id }}
+                                </small>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-building-columns text-success"></i>
+                                    <strong>Library Name</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="libraryName"
+                                       value="{{ form.library_name }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.library_name }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Row 2 -->
+                         <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-location-dot text-primary"></i>
+                                    <strong>Address:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="address"
+                                       value="{{ form.address }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.address }}
+                                </small>
+
+                            </div>
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-book text-success"></i>
+                                    <strong>Total Books:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="totalBooks"
+                                       value="{{ form.total_books }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.total_books }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Row 3 -->
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+
+                                <label>
+                                    <i class="fa-solid fa-phone text-primary"></i>
+                                    <strong>Contact No:</strong>
+                                </label>
+
+                                <input type="text"
+                                       name="contactNo"
+                                       value="{{ form.contact_no }}"
+                                       class="form-control">
+
+                                <small class="text-danger">
+                                    {{ form.inputError.contact_no }}
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <hr>
+
+                        <div class="text-center">
+
+                            {% if form.id > 0 %}
+
+                                <input type="submit"
+                                       name="operation"
+                                       value="update"
+                                       class="btn btn-primary">
+
+                                          <a href="/ORS/LibraryList" class="btn btn-secondary">
+
+                                    <i class="fa-solid fa-list"></i>
+                                    List
+
+                                </a>
+
+                            {% else %}
+
+                                <input type="submit"
+                                       name="operation"
+                                       value="save"
+                                       class="btn btn-success">
+
+                                          <a href="/ORS/Library" class="btn btn-warning">
+
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                    Reset
+
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% include "./Footer.html"%}
+
+</body>
+</html>
