@@ -53,9 +53,9 @@
                 <th>S No.</th>
                 <th>Library Id</th>
                 <th>Library Name</th>
-                <th>Mobile No</th>
                 <th>Address</th>
-                <th>Service Type</th>
+                <th>Total Books</th>
+                <th>Contact No</th>
                 <th>Edit | Delete</th>
             </tr>
 
@@ -70,9 +70,9 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ l.library_id }}</td>
                 <td>{{ l.library_name }}</td>
-                <td>{{ l.mobile_no }}</td>
                 <td>{{ l.address }}</td>
-                <td>{{ l.service_type }}</td>
+                <td>{{ l.total_books }}</td>
+                <td>{{ l.contact_no }}</td>
 
                 <td>
                     <a href="/ORS/Library/edit/{{l.id}}/" class="btn btn-warning btn-sm">

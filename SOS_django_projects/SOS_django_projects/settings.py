@@ -118,34 +118,34 @@ EMAIL_HOST_PASSWORD = 'kdko fhpl trpz epqr'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sos_20',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        # 'HOST': "host.docker.internal",
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-
 # DATABASES = {
-#     "default": {
-#         "ENGINE": "dj_db_conn_pool.backends.mysql",
-#         "NAME": "sos_20",
-#         "USER": "root",
-#         "PASSWORD": "root_pass",  # 👈 इसे बदलकर 'root_pass' कर दें
-#         "HOST": "database",
-#         "PORT": "3306",
-#
-#         "POOL_OPTIONS": {
-#             "POOL_SIZE": 10,
-#             "MAX_OVERFLOW": 90,
-#             "RECYCLE": 600,
-#         }
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'sos_20',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         # 'HOST': "host.docker.internal",
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "dj_db_conn_pool.backends.mysql",
+        "NAME": "sos_20",
+        "USER": "root",
+        "PASSWORD": "root_pass",
+        "HOST": "database",
+        "PORT": "3306",
+
+        "POOL_OPTIONS": {
+            "POOL_SIZE": 10,
+            "MAX_OVERFLOW": 90,
+            "RECYCLE": 600,
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
