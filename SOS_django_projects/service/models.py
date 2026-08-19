@@ -290,3 +290,13 @@ class Library(models.Model):
 
     class Meta:
         db_table = "sos_library"
+
+class Hotel(models.Model):
+    hotel_id = models.IntegerField()
+    hotel_name = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+    rating = models.DecimalField(max_digits=3, decimal_places=2)
+    contact_no = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_hotel"

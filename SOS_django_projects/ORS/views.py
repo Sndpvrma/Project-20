@@ -48,6 +48,8 @@ from ORS.ctl.vendor_ctl import VendorCtl
 from ORS.ctl.vendor_list_ctl import VendorListCtl
 from ORS.ctl.library_ctl import LibraryCtl
 from ORS.ctl.library_list_ctl import LibraryListCtl
+from ORS.ctl.hotel_ctl import HotelCtl
+from ORS.ctl.hotel_list_ctl import HotelListCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""
