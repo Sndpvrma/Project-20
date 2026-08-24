@@ -300,3 +300,13 @@ class Hotel(models.Model):
 
     class Meta:
         db_table = "sos_hotel"
+
+class Payment(models.Model):
+    payment_id = models.IntegerField()
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    payment_date = models.DateField(null=True, blank=True)
+    payment_method = models.CharField(max_length=50)
+    transaction_id = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_payment"

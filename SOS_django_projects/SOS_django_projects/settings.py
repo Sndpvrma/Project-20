@@ -138,6 +138,23 @@ DATABASES = {
 #         "PASSWORD": "root_pass",
 #         "HOST": "database",
 #         "PORT": "3306",
+
+#         "POOL_OPTIONS": {
+#             "POOL_SIZE": 10,
+#             "MAX_OVERFLOW": 90,
+#             "RECYCLE": 600,
+#         }
+#     }
+# }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "dj_db_conn_pool.backends.mysql",
+#         "NAME": "sos_20",
+#         "USER": "root",
+#         "PASSWORD": "root",
+#         "HOST": "host.docker.internal",
+#         "PORT": "3306",
 #
 #         "POOL_OPTIONS": {
 #             "POOL_SIZE": 10,
