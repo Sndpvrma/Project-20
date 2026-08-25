@@ -310,3 +310,13 @@ class Payment(models.Model):
 
     class Meta:
         db_table = "sos_payment"
+
+class Complaint(models.Model):
+    complaint_id = models.IntegerField()
+    complaint_type = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    complaint_date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_complaint"
