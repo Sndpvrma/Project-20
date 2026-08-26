@@ -54,6 +54,8 @@ from ORS.ctl.payment_ctl import PaymentCtl
 from ORS.ctl.payment_list_ctl import PaymentListCtl
 from ORS.ctl.complaint_ctl import ComplaintCtl
 from ORS.ctl.complaint_list_ctl import ComplaintListCtl
+from ORS.ctl.doctor_ctl import DoctorCtl
+from ORS.ctl.doctor_list_ctl import DoctorListCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""

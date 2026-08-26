@@ -320,3 +320,13 @@ class Complaint(models.Model):
 
     class Meta:
         db_table = "sos_complaint"
+
+class Doctor(models.Model):
+    doctor_id = models.IntegerField()
+    doctor_name = models.CharField(max_length=50)
+    specialization = models.CharField(max_length=200)
+    experience = models.IntegerField()
+    contact_no = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_doctor"
