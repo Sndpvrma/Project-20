@@ -330,3 +330,13 @@ class Doctor(models.Model):
 
     class Meta:
         db_table = "sos_doctor"
+
+class BankAccount(models.Model):
+    account_number = models.IntegerField()
+    account_holder_name = models.CharField(max_length=50)
+    account_type = models.CharField(max_length=200)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+    branch_name = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = "sos_bank_account"

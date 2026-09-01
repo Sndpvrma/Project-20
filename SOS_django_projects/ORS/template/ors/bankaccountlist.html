@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hotel List</title>
+    <title>Bank Account List</title>
 
     <!-- Bootstrap 4 -->
 
@@ -17,7 +17,7 @@
     {% csrf_token %}
 
     <div class="text-center mb-4">
-        <h2>Hotel List</h2>
+        <h2>Bank Account List</h2>
     </div>
 
     {% if form.list|length > 0 %}
@@ -27,10 +27,10 @@
 
         <div class="col-md-4">
             <input type="text"
-                   name="hotelId"
+                   name="accountNumber"
                    class="form-control"
-                   placeholder="Enter hotel Id"
-                   value="{{ form.hotel_id }}">
+                   placeholder="Enter account number"
+                   value="{{ form.account_number }}">
         </div>
 
         <div class="col-md-2">
@@ -51,11 +51,11 @@
 
             <tr>
                 <th>S No.</th>
-                <th>Hotel Id</th>
-                <th>Hotel Name</th>
-                <th>Location</th>
-                <th>Rating</th>
-                <th>Contact No</th>
+                <th>Account Number</th>
+                <th>Account Holder Name</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+                <th>Branch Name</th>
                 <th>Edit | Delete</th>
             </tr>
 
@@ -68,18 +68,18 @@
             <tr>
 
                 <td>{{ forloop.counter }}</td>
-                <td>{{ l.hotel_id }}</td>
-                <td>{{ l.hotel_name }}</td>
-                <td>{{ l.location }}</td>
-                <td>{{ l.rating }}</td>
-                <td>{{ l.contact_no }}</td>
+                <td>{{ l.account_number }}</td>
+                <td>{{ l.account_holder_name }}</td>
+                <td>{{ l.account_type }}</td>
+                <td>{{ l.balance }}</td>
+                <td>{{ l.branch_name }}</td>
 
                 <td>
-                    <a href="/ORS/Hotel/edit/{{l.id}}/" class="btn btn-warning btn-sm">
+                    <a href="/ORS/BankAccount/edit/{{l.id}}/" class="btn btn-warning btn-sm">
                         Edit
                     </a>
 
-                    <a href="/ORS/HotelList/delete/{{l.id}}/" class="btn btn-danger btn-sm">
+                    <a href="/ORS/BankAccountList/delete/{{l.id}}/" class="btn btn-danger btn-sm">
                         Delete
                     </a>
                 </td>
