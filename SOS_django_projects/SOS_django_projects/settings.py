@@ -155,7 +155,7 @@ DATABASES = {
 #         "PASSWORD": "root",
 #         "HOST": "host.docker.internal",
 #         "PORT": "3306",
-#
+
 #         "POOL_OPTIONS": {
 #             "POOL_SIZE": 10,
 #             "MAX_OVERFLOW": 90,
