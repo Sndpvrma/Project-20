@@ -340,3 +340,14 @@ class BankAccount(models.Model):
 
     class Meta:
         db_table = "sos_bank_account"
+
+class Vehicle(models.Model):
+    vehicle_id = models.IntegerField()
+    vehicle_name = models.CharField(max_length=50)
+    model = models.CharField(max_length=200)
+    color = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+    class Meta:
+        db_table = "sos_vehicle"
