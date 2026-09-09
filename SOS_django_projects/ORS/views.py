@@ -60,6 +60,8 @@ from ORS.ctl.bank_account_ctl import BankAccountCtl
 from ORS.ctl.bank_account_list_ctl import BankAccountListCtl
 from ORS.ctl.vehicle_ctl import VehicleCtl
 from ORS.ctl.vehicle_list_ctl import VehicleListCtl
+from ORS.ctl.room_ctl import RoomCtl
+from ORS.ctl.room_list_ctl import RoomListCtl
 
 def info(request, page, action):
     """Log incoming request details (method, page, action, and path) to stdout."""

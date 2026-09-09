@@ -351,3 +351,14 @@ class Vehicle(models.Model):
 
     class Meta:
         db_table = "sos_vehicle"
+
+class Room(models.Model):
+    room_id = models.IntegerField()
+    room_number = models.CharField(max_length=50)
+    room_type = models.CharField(max_length=200)
+    price_per_day = models.DecimalField(max_digits=10, decimal_places=2)
+    availability = models.CharField(max_length=50)
+
+
+    class Meta:
+        db_table = "sos_room"

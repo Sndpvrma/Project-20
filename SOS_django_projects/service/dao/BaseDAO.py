@@ -98,7 +98,7 @@ class BaseDAO(ABC):
         Args:
             params      : dict of filter criteria passed to apply_filters()
             page_number : page to return (1-based); pass 0 to get all records
-            page_size   : number of records per page (default 10)
+            page_size   : number of records per page (default 5)
 
         Returns:
             Page object when page_number > 0, QuerySet when page_number == 0

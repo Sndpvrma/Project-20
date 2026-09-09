@@ -179,7 +179,7 @@ class BaseRestCtl(APIView, ABC):
         report_type = filters.pop("reportType", "html").lower()
         print(f"Report type: {report_type}")
         page_number = int(filters.pop("pageNo", 0) or 0)
-        page_size = int(filters.pop("pageSize", 10) or 10)
+        page_size = int(filters.pop("pageSize", 5) or 5)
 
         # BaseService.search mutates filters to set has_next/has_previous when paginated
         result = self.get_service().search(
